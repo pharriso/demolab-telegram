@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: send telegram message
+    telegram:
+      token: "{{ token }}"
+      chat_id: "{{ chat_id }}"
+      msg: "{{ tower_workflow_job_name }} - {{ job_status }}"
