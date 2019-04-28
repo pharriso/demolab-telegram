@@ -1,15 +1,17 @@
 ---
 
 - hosts: ocp-master[0]
+  gather_facts: false
   tasks:
   - name: get ocp version
     yum: 
       list: atomic-openshift-node
     register: openshift_rpm
+    ignore_errors: true
 
   - name: send telegram message
     telegram:
       token: "{{ token }}"
       chat_id: "{{ chat_id }}"
-      msg: "{{ tower_workflow_job_name }} - version {{ openshift_rpm.results[0].version }} -  {{ job_status }}"
+      msg: "{{ tower_workflow_job_name }} - version {{ openshift_rpm.results[0].version | default('unknown') }} -  {{ job_status }}"
     delegate_to: localhost
